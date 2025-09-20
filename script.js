@@ -1,6 +1,6 @@
 // Firebase Config
 const firebaseConfig = {
-  apiKey: "AIzaSyBSec6YlQgHhxlMCHMVdA83c7hMo0T-EGI",
+  apiKey: "AIzaSyAW-mK3pwGTdu0bH-efGOWgwaB1QyHmGQ0",
   authDomain: "secondspacesa-34f63.firebaseapp.com",
   projectId: "secondspacesa-34f63",
   storageBucket: "secondspacesa-34f63.appspot.com",
