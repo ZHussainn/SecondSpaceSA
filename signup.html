@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signup - SecondSpaceSA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Create Account</h2>
+
+  <input type="email" id="email" placeholder="Email"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <select id="role">
+    <option value="buyer">Buyer</option>
+    <option value="seller">Seller</option>
+  </select><br>
+  <button onclick="doSignup()">Sign Up</button>
+
+  <p id="status"></p>
+  <p>Already have an account? <a href="login.html">Login</a></p>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+  async function doSignup() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const role = document.getElementById("role").value;
+    const status = document.getElementById("status");
+
+    try {
+      
+      const userCred = await auth.createUserWithEmailAndPassword(email, password);
+
+      
+      await db.collection("users").doc(userCred.user.uid).set({ email, role });
+
+      // Success message
+      status.style.color = "green";
+      status.innerText = "✅ Signup successful! Redirecting to login...";
+
+      
+      setTimeout(() => window.location.href = "login.html", 2000);
+
+    } catch (err) {
+      status.style.color = "red";
+      status.innerText = "❌ " + err.message;
+    }
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sell a Product - SecondSpaceSA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <h2 style="text-align:center; margin-top:20px;">🛍 Sell a Product</h2>
+
+  <div style="max-width:500px; margin:20px auto; text-align:center;">
+    <input type="text" id="pname" placeholder="Product Name">
+    <input type="number" id="pprice" placeholder="Price (ZAR)">
+    <select id="pcategory">
+      <option value="women">Women</option>
+      <option value="men">Men</option>
+    </select>
+    <!-- NEW: Size dropdown -->
+    <select id="psize">
+      <option value="">Select Size</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+    </select>
+    <input type="file" id="pimage">
+    <button onclick="sellProduct()">Upload Product</button>
+    <p id="sell-status" style="font-weight:bold;"></p>
+  </div>
+
+  <footer>
+    <p>© 2025 SecondSpaceSA</p>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- Firebase Config + Init -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSec6YlQgHhxlMCHMVdA83c7hMo0T-EGI",
+      authDomain: "secondspacesa-34f63.firebaseapp.com",
+      projectId: "secondspacesa-34f63",
+      storageBucket: "secondspacesa-34f63.appspot.com",
+      messagingSenderId: "538399802125",
+      appId: "1:538399802125:web:998cf98ffd8fdb95c82644",
+      measurementId: "G-5FZ5R8NVFX"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ✅ Cloudinary Config
+    const CLOUD_NAME = "dn0nnycgf";        
+    const UPLOAD_PRESET = "unsigned_preset"; 
+  </script>
+
+  <!-- Sell Logic -->
+  <script>
+    async function sellProduct() {
+      const statusEl = document.getElementById("sell-status");
+      statusEl.style.color = "black";
+      statusEl.innerText = "⏳ Uploading...";
+
+      const user = auth.currentUser;
+      if (!user) {
+        statusEl.style.color = "red";
+        statusEl.innerText = "⚠️ Please log in first.";
+        return;
+      }
+
+      try {
+        // Check Firestore user role
+        const userDoc = await db.collection("users").doc(user.uid).get();
+        if (!userDoc.exists) {
+          statusEl.style.color = "red";
+          statusEl.innerText = "❌ User not found in database.";
+          return;
+        }
+        if (userDoc.data().role !== "seller") {
+          statusEl.style.color = "red";
+          statusEl.innerText = "❌ Only sellers can add products.";
+          return;
+        }
+
+        // Grab product form values
+        const name = document.getElementById("pname").value;
+        const price = parseFloat(document.getElementById("pprice").value);
+        const category = document.getElementById("pcategory").value;
+        const size = document.getElementById("psize").value; 
+        const file = document.getElementById("pimage").files[0];
+
+        if (!name || !price || !file || !size) {
+          statusEl.style.color = "red";
+          statusEl.innerText = "⚠️ Fill all fields + select a size + upload an image!";
+          return;
+        }
+
+        
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", UPLOAD_PRESET);
+
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+        if (!data.secure_url) throw new Error("Image upload failed");
+        const imageUrl = data.secure_url;
+
+        
+        await db.collection("products").add({
+          name,
+          price,
+          category,
+          size, 
+          imageUrl,
+          sellerEmail: user.email,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        statusEl.style.color = "green";
+        statusEl.innerText = "✅ Product posted successfully! Redirecting...";
+
+        
+        document.getElementById("pname").value = "";
+        document.getElementById("pprice").value = "";
+        document.getElementById("pcategory").value = "women";
+        document.getElementById("psize").value = "";
+        document.getElementById("pimage").value = "";
+
+        
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000);
+
+      } catch (err) {
+        console.error("Error:", err);
+        statusEl.style.color = "red";
+        statusEl.innerText = "❌ Error: " + err.message;
+      }
+    }
+
+    // Navbar
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("navbar").innerHTML = data);
+  </script>
+</body>
+</html>

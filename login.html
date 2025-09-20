@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - SecondSpaceSA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Login</h2>
+
+  <input type="email" id="email" placeholder="Email"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <button onclick="doLogin()">Login</button>
+
+  <p id="status"></p>
+  <p>Don’t have an account? <a href="signup.html">Sign Up</a></p>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+  async function doLogin() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const status = document.getElementById("status");
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      status.innerText = "✅ Login successful! Redirecting...";
+      setTimeout(() => window.location.href = "index.html", 1500);
+    } catch (err) {
+      status.innerText = "❌ " + err.message;
+    }
+  }
+  </script>
+</body>
+</html>

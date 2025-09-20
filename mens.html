@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Men’s Clothing - SecondSpaceSA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <div id="navbar"></div>
+
+  <h2 style="text-align:center; margin-top:20px;">Men’s Clothing</h2>
+
+  <!-- Auth Status -->
+  <div id="auth-status" style="text-align:center; margin:20px;"></div>
+
+  <!-- Product Section -->
+  <div id="product-section">
+    <ul id="productList"></ul>
+  </div>
+
+  <!-- Cart Section -->
+  <div id="cart-section" style="display:none;">
+    <h2>Your Cart</h2>
+    <ul id="cartList"></ul>
+    <button onclick="checkout()">Checkout</button>
+  </div>
+
+  <!-- Orders Section -->
+  <div id="orders-section" style="display:none;">
+    <h2>Your Orders</h2>
+    <ul id="orderList"></ul>
+  </div>
+
+  <footer>
+    <p>© 2025 SecondSpaceSA</p>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- Firebase Init -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSec6YlQgHhxlMCHMVdA83c7hMo0T-EGI",
+      authDomain: "secondspacesa-34f63.firebaseapp.com",
+      projectId: "secondspacesa-34f63",
+      storageBucket: "secondspacesa-34f63.appspot.com",
+      messagingSenderId: "538399802125",
+      appId: "1:538399802125:web:998cf98ffd8fdb95c82644",
+      measurementId: "G-5FZ5R8NVFX"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
+  <!-- Main App Logic -->
+  <script src="script.js"></script>
+  <script>
+    async function loadMensProducts() {
+      const list = document.getElementById("productList");
+      list.innerHTML = ""; 
+
+      try {
+        const snapshot = await db.collection("products")
+          .where("category", "==", "men")
+          .get();
+
+        if (snapshot.empty) {
+          list.innerHTML = "<p style='text-align:center;'>No men’s products found.</p>";
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const p = doc.data();
+          list.innerHTML += `
+            <li>
+              <img src="${p.imageUrl}" alt="${p.name}">
+              <h3>${p.name}</h3>
+              <p>R${p.price}</p>
+              <p>Seller: ${p.sellerEmail}</p>
+            </li>
+          `;
+        });
+      } catch (err) {
+        console.error("Error loading men’s products:", err);
+        list.innerHTML = "<p style='color:red;'>❌ Failed to load products.</p>";
+      }
+    }
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        loadMensProducts();
+      } else {
+        document.getElementById("productList").innerHTML =
+          "<p style='text-align:center;'>⚠️ Please log in to view products.</p>";
+      }
+    });
+
+  
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("navbar").innerHTML = data);
+  </script>
+</body>
+</html>

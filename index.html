@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SecondSpaceSA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <div id="navbar"></div>
+
+  <!-- Hero Section -->
+  <header>
+    <div class="category-block women">
+      <h2>Women’s Clothing</h2>
+      <a href="womens.html" class="btn">Shop Now</a>
+    </div>
+    <div class="category-block men">
+      <h2>Men’s Clothing</h2>
+      <a href="mens.html" class="btn">Shop Now</a>
+    </div>
+  </header>
+
+  <!-- Sell Now at Bottom -->
+  <div style="text-align:center; margin:40px;">
+    <a href="sell.html" class="btn">🛍 Sell Now</a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 SecondSpaceSA</p>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  <script src="script.js"></script>
+
+  <!-- Load Navbar -->
+  <script>
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("navbar").innerHTML = data);
+  </script>
+</body>
+</html>

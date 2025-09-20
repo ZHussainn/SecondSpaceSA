@@ -1,0 +1,398 @@
+/* ===== General Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  background: #f8f8f8;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* ===== Navbar ===== */
+nav {
+  background: #000;
+  color: #fff;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav h1 {
+  font-size: 1.5rem;
+  color: #e50914;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav ul li {
+  position: relative;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #e50914;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: -40px;
+  background: #111;
+  min-width: 180px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  border-radius: 5px;
+  padding: 10px 0;
+  z-index: 1000;
+}
+
+.dropdown-content li {
+  display: block;
+  padding: 5px 20px;
+}
+
+.dropdown-content li a {
+  color: #fff;
+  font-weight: normal;
+}
+
+.dropdown-content li a:hover {
+  color: #e50914;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+
+header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 80vh;
+}
+
+.category-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.category-block::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.category-block h2,
+.category-block .btn {
+  position: relative;
+  z-index: 2;
+}
+
+.category-block.women {
+  background-image: url("images/DENIM_Mega_Menu_600x.webp");
+}
+
+.category-block.men {
+  background-image: url("images/1318446-800w.jpg");
+}
+
+
+.btn, button {
+  background: #e50914;
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn:hover, button:hover {
+  background: #b20710;
+}
+
+
+#productList, #products, #wishlist, #cartList, #orderList, #admin-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 25px;
+  padding: 20px;
+}
+
+.product {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.product:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.product img {
+  width: 100%;
+  height: 260px;    
+  object-fit: cover;
+  display: block;
+}
+
+.product-details {
+  padding: 10px;
+  text-align: left;
+}
+
+.product-price {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 3px;
+  color: #000;
+}
+
+.product-size {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 3px;
+}
+
+.product-brand {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.product-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px 12px;
+  gap: 8px;
+}
+
+.product-actions button {
+  flex: 1;
+  font-size: 0.85rem;
+  padding: 6px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+.product-actions .cart-btn {
+  background: #e50914;
+  color: #fff;
+}
+
+.product-actions .cart-btn:hover {
+  background: #b20710;
+}
+
+.product-actions .wishlist-btn {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.product-actions .wishlist-btn:hover {
+  background: #ddd;
+}
+
+
+#cartList li, #wishlist li, #orderList li {
+  list-style: none;
+  background: #fff;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+#cartList li img, #wishlist li img {
+  border-radius: 5px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+
+input, select {
+  display: block;
+  width: 90%;
+  max-width: 350px;
+  margin: 10px auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+h2 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+#status {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* ===== Footer ===== */
+footer {
+  background: #000;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  margin-top: 30px;
+}
+
+
+
+
+
+
+#productList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  padding: 20px;
+  list-style: none; 
+}
+
+#productList li {
+  flex: 1 1 250px;
+  max-width: 300px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+#productList li img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.contact-btn {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #830c0c;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.contact-btn:hover {
+  background-color: #700505;
+}
+
+
+
+.seller-info {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+}
+
+/* Contact Seller button */
+.contact-btn {
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  background-color: #5c0505;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out;
+  white-space: nowrap; 
+}
+
+.contact-btn:hover {
+  background-color: #520505;
+}
+
+
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: black;
+  padding: 10px 20px;
+  color: white;
+}
+
+
+
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  background: black;
+  padding: 10px 20px;
+  color: white;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: red;
+  margin-right: auto; 
+}
+
+.search-container {
+  flex: 1;                     
+  display: flex;
+  justify-content: center;     
+}
+
+.search-container input {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  width: 350px;      
+}
+
+.search-container button {
+  background: crimson;
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 8px;
+}
