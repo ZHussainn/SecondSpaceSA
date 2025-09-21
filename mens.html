@@ -7,7 +7,16 @@
 </head>
 <body>
   <!-- Navbar -->
-  <div id="navbar"></div>
+  <nav class="navbar">
+  <h1 class="logo">SecondSpaceSA</h1>
+
+  <!-- 🔍 Search bar -->
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search products...">
+    <button onclick="searchProducts()">Search</button>
+  </div>
+</nav>
+
 
   <h2 style="text-align:center; margin-top:20px;">Men’s Clothing</h2>
 
@@ -16,7 +25,7 @@
 
   <!-- Product Section -->
   <div id="product-section">
-    <ul id="productList"></ul>
+    <ul id="productList" class="products-grid"></ul>
   </div>
 
   <!-- Cart Section -->
@@ -60,15 +69,18 @@
 
   <!-- Main App Logic -->
   <script src="script.js"></script>
+
   <script>
     async function loadMensProducts() {
       const list = document.getElementById("productList");
-      list.innerHTML = ""; 
+      list.innerHTML = "<p style='text-align:center;'>⏳ Loading...</p>";
 
       try {
         const snapshot = await db.collection("products")
           .where("category", "==", "men")
           .get();
+
+        list.innerHTML = "";
 
         if (snapshot.empty) {
           list.innerHTML = "<p style='text-align:center;'>No men’s products found.</p>";
@@ -78,33 +90,56 @@
         snapshot.forEach(doc => {
           const p = doc.data();
           list.innerHTML += `
-            <li>
-              <img src="${p.imageUrl}" alt="${p.name}">
+            <li class="product-card">
+              <img src="${p.imageUrl}" alt="${p.name}" width="400" style="border-radius:15px;">
               <h3>${p.name}</h3>
-              <p>R${p.price}</p>
-              <p>Seller: ${p.sellerEmail}</p>
+              <p>R${p.price} ${p.size ? '| Size: ' + p.size : ''}</p>
+              <p>
+                Seller Email: ${p.sellerEmail || "Unknown"} 
+                ${p.sellerEmail ? `<a href="mailto:${p.sellerEmail}" class="contact-btn">Contact Seller</a>` : ""}
+              </p>
             </li>
           `;
         });
+
       } catch (err) {
-        console.error("Error loading men’s products:", err);
-        list.innerHTML = "<p style='color:red;'>❌ Failed to load products.</p>";
+        list.innerHTML = `<p style='text-align:center;'>❌ Error loading products: ${err.message}</p>`;
+        console.error(err);
       }
     }
 
+
+   // ✅ Search Function
+    function searchProducts() {
+      const query = document.getElementById("searchInput")?.value.toLowerCase() || "";
+      const productCards = document.querySelectorAll(".product-card");
+
+      productCards.forEach(card => {
+        const name = card.querySelector("h3").innerText.toLowerCase();
+        if (name.includes(query)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    // ✅ Run after login state is ready
     auth.onAuthStateChanged(user => {
+      const productList = document.getElementById("productList");
       if (user) {
         loadMensProducts();
       } else {
-        document.getElementById("productList").innerHTML =
-          "<p style='text-align:center;'>⚠️ Please log in to view products.</p>";
+        productList.innerHTML = "<p style='text-align:center;'>⚠️ Please log in to view products.</p>";
       }
     });
 
-  
+    // Load navbar
     fetch("navbar.html")
       .then(res => res.text())
-      .then(data => document.getElementById("navbar").innerHTML = data);
+      .then(data => document.getElementById("navbar").innerHTML = data)
+      .catch(err => console.error("Error loading navbar:", err));
   </script>
 </body>
 </html>
+
